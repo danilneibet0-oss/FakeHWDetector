@@ -1,0 +1,12 @@
+id: gpu.vram_dxgi_nvml_mismatch
+applies_to: [gpu]
+signals: [vram_sources_disagree]
+condition: "vram_sources_disagree"
+weight: 0.5
+false_positive_risk: low
+explanation:
+  en: "DXGI and NVML report video memory sizes that differ by more than 10%."
+  ru: "DXGI и NVML сообщают объём видеопамяти, различающийся более чем на 10%."
+recommendation:
+  en: "Check the VRAM size in the driver control panel and in a second tool (GPU-Z); a spoofed driver or BIOS may report different values to different APIs."
+  ru: "Проверьте объём VRAM в панели драйвера и вторым инструментом (GPU-Z); подменённые драйвер или BIOS могут отдавать разным API разные значения."

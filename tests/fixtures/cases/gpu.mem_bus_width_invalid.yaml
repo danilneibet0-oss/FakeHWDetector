@@ -1,0 +1,36 @@
+rule: gpu.mem_bus_width_invalid
+# Norm: memory bus width is a positive multiple of 32 bits (memory chips are 32 bits wide; HBM uses wider stacks).
+# Suspicious: a width that cannot be built from 32-bit channels.
+cases:
+  - name: real RTX 3060 Ti - 256-bit
+    kind: negative
+    expect: not_fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "2486", mem_bus_width_bits: "256"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - 250-bit bus
+    kind: positive
+    expect: fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "2486", mem_bus_width_bits: "250"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: smallest valid width, 32 bits
+    kind: borderline
+    expect: not_fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "2486", mem_bus_width_bits: "32"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: bus width not reported (non-NVIDIA GPU or no NVML)
+    kind: unverified
+    expect: unverified
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "2486"}
+      collected_at: "2024-01-01T00:00:00Z"

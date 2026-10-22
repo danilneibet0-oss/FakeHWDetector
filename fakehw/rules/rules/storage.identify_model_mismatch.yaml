@@ -1,0 +1,12 @@
+id: storage.identify_model_mismatch
+applies_to: [storage]
+signals: [identify_model_matches]
+condition: "not identify_model_matches"
+weight: 0.35
+false_positive_risk: medium
+explanation:
+  en: The model Windows reports differs from the model stored in the drive own Identify data.
+  ru: Модель, которую сообщает Windows, отличается от модели в собственных данных Identify накопителя.
+recommendation:
+  en: A driver, RAID or bridge layer may rename drives. Compare with the drive label and check the controller or driver in use.
+  ru: Драйвер, RAID или мост могут переименовывать накопители. Сравните с маркировкой и проверьте контроллер или драйвер.

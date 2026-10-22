@@ -1,0 +1,36 @@
+rule: gpu.pcie_link_inconsistent
+# Norm: the current PCIe link generation/width never exceeds the maximum; idle down-training is normal.
+# Suspicious: current gen or width above the reported maximum (impossible for a real link).
+cases:
+  - name: real RTX 3060 Ti - gen 4 x16 of max gen 4 x16
+    kind: negative
+    expect: not_fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {pcie_gen_current: "4", pcie_gen_max: "4", pcie_width_current: "16", pcie_width_max: "16"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - current generation 5 above the maximum 4
+    kind: positive
+    expect: fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {pcie_gen_current: "5", pcie_gen_max: "4", pcie_width_current: "16", pcie_width_max: "16"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: idle power saving - gen 1 x4 while the maximum is gen 4 x16 is normal
+    kind: borderline
+    expect: not_fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {pcie_gen_current: "1", pcie_gen_max: "4", pcie_width_current: "4", pcie_width_max: "16"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: maximum not reported
+    kind: unverified
+    expect: unverified
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {pcie_gen_current: "4", pcie_width_current: "16"}
+      collected_at: "2024-01-01T00:00:00Z"

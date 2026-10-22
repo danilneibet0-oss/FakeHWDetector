@@ -1,0 +1,37 @@
+rule: storage.nvme_vid_unregistered
+# Norm: the NVMe Identify VID is a PCI vendor ID registered in pci.ids. Suspicious: VID not registered.
+cases:
+  - name: real NVMe drive (controller VID 1987)
+    kind: negative
+    expect: not_fired
+    device:
+      class: storage
+      source: fixture
+      raw_ids: {bus_type: "NVMe", identify_source: "nvme", nvme_vid: "1987", nvme_ssvid: "1987"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - VID replaced by one absent from pci.ids
+    kind: positive
+    expect: fired
+    device:
+      class: storage
+      source: fixture
+      raw_ids: {bus_type: "NVMe", identify_source: "nvme", nvme_vid: "7777", nvme_ssvid: "7777"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - only the subsystem vendor differs (OEM rebrand), not this rule's business
+    kind: borderline
+    expect: not_fired
+    device:
+      class: storage
+      source: fixture
+      raw_ids: {bus_type: "NVMe", identify_source: "nvme", nvme_vid: "1987", nvme_ssvid: "7777"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: SATA drive without admin rights - no NVMe data
+    kind: unverified
+    expect: unverified
+    device:
+      class: storage
+      source: fixture
+      raw_ids: {bus_type: "SATA", identify_source: "none"}
+      privilege_needed: true
+      errors: ["requires administrator rights"]
+      collected_at: "2024-01-01T00:00:00Z"

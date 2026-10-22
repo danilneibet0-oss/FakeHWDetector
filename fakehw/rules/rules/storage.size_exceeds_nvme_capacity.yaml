@@ -1,0 +1,12 @@
+id: storage.size_exceeds_nvme_capacity
+applies_to: [storage]
+signals: [size_exceeds_nvme_capacity]
+condition: "size_exceeds_nvme_capacity"
+weight: 0.5
+false_positive_risk: low
+explanation:
+  en: The capacity reported by Windows is larger than the total NVM capacity (TNVMCAP) the drive reports about itself.
+  ru: Ёмкость, которую показывает Windows, больше общей ёмкости NVM (TNVMCAP), которую накопитель сообщает о себе.
+recommendation:
+  en: Compare with the label and run a full-capacity write/verify test (for example f3 or H2testw) on a drive without data.
+  ru: Сравните с маркировкой и выполните полный тест записи и чтения (например, f3 или H2testw) на накопителе без данных.

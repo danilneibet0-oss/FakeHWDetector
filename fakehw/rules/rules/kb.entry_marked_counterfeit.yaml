@@ -1,0 +1,12 @@
+id: kb.entry_marked_counterfeit
+applies_to: [usb, pci, gpu]
+signals: [db_marks_counterfeit]
+condition: "db_marks_counterfeit"
+weight: 0.65
+false_positive_risk: medium
+explanation:
+  en: The usb.ids / pci.ids entry for this exact ID is itself described as counterfeit or fake.
+  ru: Запись в usb.ids / pci.ids для именно этого ID сама описана как контрафактная или поддельная.
+recommendation:
+  en: Treat the device as unverified until its origin is confirmed; the same ID may also be reused by genuine devices.
+  ru: Считайте устройство непроверенным, пока не подтверждено происхождение; такой же ID могут использовать и настоящие устройства.

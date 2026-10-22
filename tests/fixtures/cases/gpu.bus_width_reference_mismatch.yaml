@@ -1,0 +1,36 @@
+rule: gpu.bus_width_reference_mismatch
+# Norm: reported memory bus width is listed in gpu_refs.yaml for this PCI device ID.
+# Suspicious: a different width (a lower-end chip presented under another ID). No reference means "could not verify".
+cases:
+  - name: real RTX 3060 Ti - 256-bit
+    kind: negative
+    expect: not_fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "2486", mem_bus_width_bits: "256"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - 128-bit reported for the 256-bit device ID
+    kind: positive
+    expect: fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "2486", mem_bus_width_bits: "128"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: matching width while VRAM data is missing is not a mismatch
+    kind: borderline
+    expect: not_fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "2486", mem_bus_width_bits: "256", pcie_gen_max: "3"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: device ID without a reference entry
+    kind: unverified
+    expect: unverified
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "FFFF", mem_bus_width_bits: "256"}
+      collected_at: "2024-01-01T00:00:00Z"

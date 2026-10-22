@@ -1,0 +1,36 @@
+rule: pci.subsys_vendor_unknown
+# Norm: no subsystem (0000:0000) or a subsystem vendor registered in pci.ids.
+# Suspicious: subsystem vendor ID present but not registered.
+cases:
+  - name: real RTX 3060 Ti, subsystem vendor 1B4C (registered)
+    kind: negative
+    expect: not_fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "2486", subsys_vendor_id: "1B4C", subsys_device_id: "146C", revision: "A1", class_code: "030000"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - subsystem vendor replaced by an unregistered ID
+    kind: positive
+    expect: fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "2486", subsys_vendor_id: "FFF0", subsys_device_id: "146C", class_code: "030000"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: real device without subsystem (SUBSYS_00000000) is normal
+    kind: borderline
+    expect: not_fired
+    device:
+      class: pci
+      source: fixture
+      raw_ids: {vendor_id: "8086", device_id: "43EF", subsys_vendor_id: "0000", subsys_device_id: "0000", revision: "11", class_code: "050000"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: device whose DeviceID has no SUBSYS part
+    kind: unverified
+    expect: unverified
+    device:
+      class: pci
+      source: fixture
+      raw_ids: {vendor_id: "8086", device_id: "43EF"}
+      collected_at: "2024-01-01T00:00:00Z"

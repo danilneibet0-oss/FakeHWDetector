@@ -1,0 +1,12 @@
+id: storage.nvme_vid_unregistered
+applies_to: [storage]
+signals: [nvme_vid_known]
+condition: "not nvme_vid_known"
+weight: 0.4
+false_positive_risk: medium
+explanation:
+  en: The vendor ID in the NVMe Identify data is not registered in pci.ids.
+  ru: ID вендора в данных NVMe Identify не зарегистрирован в pci.ids.
+recommendation:
+  en: Update the database (fakehw kb update) and re-scan; compare the controller with the drive label.
+  ru: Обновите базу (fakehw kb update) и повторите проверку; сравните контроллер с маркировкой накопителя.

@@ -1,0 +1,12 @@
+id: ram.jedec_parity_invalid
+applies_to: [ram]
+signals: [jedec_parity_ok]
+condition: "not jedec_parity_ok"
+weight: 0.3
+false_positive_risk: medium
+explanation:
+  en: The JEDEC manufacturer code reported for the memory module breaks the JEP106 odd-parity rule, so it is not a well-formed code.
+  ru: JEDEC-код производителя модуля памяти нарушает правило нечётной чётности JEP106, то есть код сформирован некорректно.
+recommendation:
+  en: Compare the module label with the reported manufacturer and part number; check a second tool (for example CPU-Z SPD tab).
+  ru: Сверьте маркировку модуля с производителем и part number; проверьте вторым инструментом (например, вкладка SPD в CPU-Z).

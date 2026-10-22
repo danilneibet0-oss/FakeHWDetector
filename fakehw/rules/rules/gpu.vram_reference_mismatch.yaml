@@ -1,0 +1,12 @@
+id: gpu.vram_reference_mismatch
+applies_to: [gpu]
+signals: [vram_matches_reference]
+condition: "not vram_matches_reference"
+weight: 0.5
+false_positive_risk: medium
+explanation:
+  en: "The video memory size is not one of the sizes known for this PCI device ID."
+  ru: "Объём видеопамяти не входит в известные для этого PCI device ID варианты."
+recommendation:
+  en: "The reference list is partial and a vendor may ship other memory variants under one ID. Compare with the card box and the vendor specification."
+  ru: "Справочник неполный, а производитель может выпускать под одним ID другие варианты памяти. Сравните с коробкой и спецификацией производителя."

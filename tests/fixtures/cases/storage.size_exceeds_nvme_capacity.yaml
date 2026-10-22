@@ -1,0 +1,36 @@
+rule: storage.size_exceeds_nvme_capacity
+# Norm: the capacity Windows reports is at most the controller's total NVM capacity (TNVMCAP) from Identify.
+# Suspicious: Windows reports more than the drive says it has. TNVMCAP is optional (0 = not reported).
+cases:
+  - name: real NVMe - Windows size is below TNVMCAP
+    kind: negative
+    expect: not_fired
+    device:
+      class: storage
+      source: fixture
+      raw_ids: {bus_type: "NVMe", size_exceeds_nvme_capacity: "false", nvme_tnvmcap_bytes: "240057409536"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - Windows size raised to 2 TB
+    kind: positive
+    expect: fired
+    device:
+      class: storage
+      source: fixture
+      raw_ids: {bus_type: "NVMe", size_exceeds_nvme_capacity: "true", nvme_tnvmcap_bytes: "240057409536"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: Windows size equal to TNVMCAP is the normal edge
+    kind: borderline
+    expect: not_fired
+    device:
+      class: storage
+      source: fixture
+      raw_ids: {bus_type: "NVMe", size_exceeds_nvme_capacity: "false", nvme_tnvmcap_bytes: "240057409536"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: drive does not report TNVMCAP (0) - cannot compare
+    kind: unverified
+    expect: unverified
+    device:
+      class: storage
+      source: fixture
+      raw_ids: {bus_type: "NVMe", nvme_tnvmcap_bytes: "0"}
+      collected_at: "2024-01-01T00:00:00Z"

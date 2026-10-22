@@ -1,0 +1,12 @@
+id: gpu.mem_bus_width_invalid
+applies_to: [gpu]
+signals: [bus_width_valid]
+condition: "not bus_width_valid"
+weight: 0.35
+false_positive_risk: medium
+explanation:
+  en: "The reported memory bus width is not a positive multiple of 32 bits, so it cannot be built from memory chips."
+  ru: "Заявленная ширина шины памяти не кратна 32 битам, то есть её нельзя собрать из микросхем памяти."
+recommendation:
+  en: "Re-read the value in a second tool; a non-standard width points to an unreliable or altered report."
+  ru: "Перепроверьте значение вторым инструментом; нестандартная ширина указывает на недостоверный или изменённый отчёт."

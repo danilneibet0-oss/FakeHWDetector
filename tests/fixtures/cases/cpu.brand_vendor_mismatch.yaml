@@ -1,0 +1,40 @@
+rule: cpu.brand_vendor_mismatch
+# Norm: the brand string names the same vendor as the CPUID vendor string.
+# Suspicious: brand says Intel but CPUID vendor is AMD (or vice versa).
+cases:
+  - name: real i5-11400 from the developer machine
+    kind: negative
+    expect: not_fired
+    device:
+      class: cpu
+      source: cpuid
+      raw_ids: {family: "6", model: "167", stepping: "1", hypervisor_present: "false"}
+      strings: {vendor: "GenuineIntel", brand: "11th Gen Intel(R) Core(TM) i5-11400 @ 2.60GHz"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - CPUID vendor changed to AuthenticAMD, brand untouched
+    kind: positive
+    expect: fired
+    device:
+      class: cpu
+      source: cpuid
+      raw_ids: {family: "6", model: "167", stepping: "1", hypervisor_present: "false"}
+      strings: {vendor: "AuthenticAMD", brand: "11th Gen Intel(R) Core(TM) i5-11400 @ 2.60GHz"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: engineering-sample style brand "Genuine Intel(R) CPU 0000" still names Intel
+    kind: borderline
+    expect: not_fired
+    device:
+      class: cpu
+      source: cpuid
+      raw_ids: {family: "6", model: "167", stepping: "1", hypervisor_present: "false"}
+      strings: {vendor: "GenuineIntel", brand: "Genuine Intel(R) CPU 0000 @ 2.40GHz"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: brand names neither Intel nor AMD - cannot judge
+    kind: unverified
+    expect: unverified
+    device:
+      class: cpu
+      source: cpuid
+      raw_ids: {family: "24", model: "0", stepping: "1", hypervisor_present: "false"}
+      strings: {vendor: "HygonGenuine", brand: "Hygon C86 7185 32-core Processor"}
+      collected_at: "2024-01-01T00:00:00Z"

@@ -1,0 +1,12 @@
+id: storage.serial_placeholder
+applies_to: [storage]
+signals: [serial_placeholder]
+condition: "serial_placeholder"
+weight: 0.2
+false_positive_risk: high
+explanation:
+  en: The drive reports an empty, all-zero, repeated-character or placeholder serial number.
+  ru: Накопитель сообщает пустой, нулевой, состоящий из одного повторяющегося символа или шаблонный серийный номер.
+recommendation:
+  en: Weak evidence alone; some USB bridges and cheap drives do not report serials. Read the other findings for this drive.
+  ru: "Сам по себе слабый признак: часть USB-мостов и недорогих накопителей не отдаёт серийник. Смотрите остальные срабатывания для этого накопителя."

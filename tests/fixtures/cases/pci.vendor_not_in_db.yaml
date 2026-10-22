@@ -1,0 +1,37 @@
+rule: pci.vendor_not_in_db
+# Norm: vendor ID is registered in pci.ids. Suspicious: vendor ID absent from the database.
+# Positive/borderline devices are real captured devices with HAND-EDITED IDs (marked "edited").
+cases:
+  - name: real RTX 3060 Ti from the developer machine
+    kind: negative
+    expect: not_fired
+    device: &real_gpu
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "2486", subsys_vendor_id: "1B4C", subsys_device_id: "146C", revision: "A1", class_code: "030000"}
+      strings: {name: "NVIDIA GeForce RTX 3060 Ti"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - vendor ID replaced by one absent from pci.ids
+    kind: positive
+    expect: fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "7777", device_id: "2486", class_code: "030000"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - known vendor, unknown device must not trigger the vendor rule
+    kind: borderline
+    expect: not_fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "FFFF", class_code: "030000"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: collector failure record has no IDs - cannot verify
+    kind: unverified
+    expect: unverified
+    device:
+      class: pci
+      source: fixture
+      errors: ["powershell missing"]
+      collected_at: "2024-01-01T00:00:00Z"

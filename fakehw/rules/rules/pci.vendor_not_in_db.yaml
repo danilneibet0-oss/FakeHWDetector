@@ -1,0 +1,12 @@
+id: pci.vendor_not_in_db
+applies_to: [pci, gpu]
+signals: [vendor_known]
+condition: "not vendor_known"
+weight: 0.4
+false_positive_risk: medium
+explanation:
+  en: The PCI vendor ID is not registered in the pci.ids database.
+  ru: ID вендора PCI не зарегистрирован в базе pci.ids.
+recommendation:
+  en: Update the database (fakehw kb update) and re-scan. If it still fails, check the device against the manufacturer's data.
+  ru: Обновите базу (fakehw kb update) и повторите проверку. Если не помогло, сверьте устройство с данными производителя.

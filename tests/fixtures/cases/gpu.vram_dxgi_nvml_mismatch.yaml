@@ -1,0 +1,36 @@
+rule: gpu.vram_dxgi_nvml_mismatch
+# Norm: DXGI dedicated VRAM and NVML total memory agree within 10% (the driver reserves a few percent).
+# Suspicious: the two APIs disagree by more than 10%.
+cases:
+  - name: real RTX 3060 Ti - DXGI 8024 MiB vs NVML 8192 MiB (2% apart)
+    kind: negative
+    expect: not_fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "2486", vram_dedicated_bytes: "8413773824", nvml_vram_total_bytes: "8589934592"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - DXGI reports 2 GiB while NVML says 8 GiB
+    kind: positive
+    expect: fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "2486", vram_dedicated_bytes: "2147483648", nvml_vram_total_bytes: "8589934592"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - 7% apart, still inside the tolerance
+    kind: borderline
+    expect: not_fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "2486", vram_dedicated_bytes: "8000000000", nvml_vram_total_bytes: "8589934592"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: only DXGI available - nothing to compare
+    kind: unverified
+    expect: unverified
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "2486", vram_dedicated_bytes: "8413773824"}
+      collected_at: "2024-01-01T00:00:00Z"

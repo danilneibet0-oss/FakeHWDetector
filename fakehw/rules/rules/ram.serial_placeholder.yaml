@@ -1,0 +1,12 @@
+id: ram.serial_placeholder
+applies_to: [ram]
+signals: [serial_placeholder]
+condition: "serial_placeholder"
+weight: 0.15
+false_positive_risk: high
+explanation:
+  en: The memory module reports an empty, all-zero, repeated-character or placeholder serial number.
+  ru: Модуль памяти сообщает пустой, нулевой, состоящий из одного повторяющегося символа или шаблонный серийный номер.
+recommendation:
+  en: Weak evidence alone; some manufacturers do not program serial numbers. Look at the other findings for this module.
+  ru: "Сам по себе слабый признак: часть производителей не прошивает серийные номера. Смотрите на остальные срабатывания для этого модуля."

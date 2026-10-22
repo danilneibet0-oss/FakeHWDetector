@@ -1,0 +1,37 @@
+rule: storage.identify_model_mismatch
+# Norm: the model Windows reports matches the model in the drive's own Identify data (truncation allowed).
+# Suspicious: the two models differ - a driver or firmware layer reports something other than the drive.
+cases:
+  - name: real NVMe - Windows model equals Identify model
+    kind: negative
+    expect: not_fired
+    device:
+      class: storage
+      source: fixture
+      raw_ids: {bus_type: "NVMe", identify_model_matches: "true"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - Windows model changed to a different product
+    kind: positive
+    expect: fired
+    device:
+      class: storage
+      source: fixture
+      raw_ids: {bus_type: "NVMe", identify_model_matches: "false"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: truncated model (driver cuts the name) still counts as a match
+    kind: borderline
+    expect: not_fired
+    device:
+      class: storage
+      source: fixture
+      raw_ids: {bus_type: "NVMe", identify_model_matches: "true"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: Identify unavailable without admin rights
+    kind: unverified
+    expect: unverified
+    device:
+      class: storage
+      source: fixture
+      raw_ids: {bus_type: "SATA", identify_source: "none"}
+      privilege_needed: true
+      collected_at: "2024-01-01T00:00:00Z"

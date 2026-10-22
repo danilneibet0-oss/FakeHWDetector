@@ -1,0 +1,35 @@
+rule: storage.serial_placeholder
+# Norm: serial_shape "normal". Suspicious: empty, all zeros/F, repeated char or placeholder text.
+cases:
+  - name: real SATA SSD serial
+    kind: negative
+    expect: not_fired
+    device:
+      class: storage
+      source: fixture
+      raw_ids: {bus_type: "SATA", serial_shape: "normal"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - serial all zeros
+    kind: positive
+    expect: fired
+    device:
+      class: storage
+      source: fixture
+      raw_ids: {bus_type: "SATA", serial_shape: "zeros"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - placeholder word instead of a serial
+    kind: borderline
+    expect: fired
+    device:
+      class: storage
+      source: fixture
+      raw_ids: {bus_type: "SATA", serial_shape: "placeholder_text"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: serial not reported
+    kind: unverified
+    expect: unverified
+    device:
+      class: storage
+      source: fixture
+      raw_ids: {bus_type: "SATA"}
+      collected_at: "2024-01-01T00:00:00Z"

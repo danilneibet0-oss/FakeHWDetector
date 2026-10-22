@@ -1,0 +1,37 @@
+rule: gpu.pcie_link_exceeds_reference
+# Norm: the maximum PCIe link reported does not exceed what the chip supports (gpu_refs.yaml). A lower maximum is normal:
+# NVML reports the limit of card AND slot, so an older slot lowers it.
+# Suspicious: generation or width above the chip's capability.
+cases:
+  - name: real RTX 3060 Ti - max gen 4 x16 equals the reference
+    kind: negative
+    expect: not_fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "2486", pcie_gen_max: "4", pcie_width_max: "16"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - generation 5 reported for a gen 4 chip
+    kind: positive
+    expect: fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "2486", pcie_gen_max: "5", pcie_width_max: "16"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: card in an older gen 3 x8 slot reports lower maximums - normal
+    kind: borderline
+    expect: not_fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "2486", pcie_gen_max: "3", pcie_width_max: "8"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: device ID without a reference entry
+    kind: unverified
+    expect: unverified
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "FFFF", pcie_gen_max: "4", pcie_width_max: "16"}
+      collected_at: "2024-01-01T00:00:00Z"

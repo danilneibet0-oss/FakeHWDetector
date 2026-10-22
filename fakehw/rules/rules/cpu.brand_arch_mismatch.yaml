@@ -1,0 +1,12 @@
+id: cpu.brand_arch_mismatch
+applies_to: [cpu]
+signals: [arch_known, brand_matches_arch]
+condition: "arch_known and not brand_matches_arch"
+weight: 0.45
+false_positive_risk: high
+explanation:
+  en: The brand string does not fit the microarchitecture implied by the CPUID family/model.
+  ru: Строка бренда не соответствует микроархитектуре, которую определяют family/model из CPUID.
+recommendation:
+  en: Check the exact model on the manufacturer's site. The table covers few signatures and OEM or rebranded SKUs may be missing.
+  ru: Проверьте точную модель на сайте производителя. Таблица покрывает мало сигнатур, OEM и ребрендированные модели могут отсутствовать.

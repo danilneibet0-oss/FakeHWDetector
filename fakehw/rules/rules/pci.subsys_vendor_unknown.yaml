@@ -1,0 +1,12 @@
+id: pci.subsys_vendor_unknown
+applies_to: [pci, gpu]
+signals: [subsys_present, subsys_vendor_known]
+condition: "subsys_present and not subsys_vendor_known"
+weight: 0.2
+false_positive_risk: medium
+explanation:
+  en: The subsystem vendor ID is set but is not registered in pci.ids.
+  ru: ID вендора подсистемы задан, но не зарегистрирован в pci.ids.
+recommendation:
+  en: Compare the card brand with its subsystem vendor; OEM and board-partner IDs missing from the database are common.
+  ru: Сопоставьте бренд карты с вендором подсистемы; OEM и партнёрские ID, которых нет в базе, встречаются часто.

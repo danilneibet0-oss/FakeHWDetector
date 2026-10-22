@@ -1,0 +1,14 @@
+{
+  "pci": {
+    "source_url": "https://pci-ids.ucw.cz/v2.2/pci.ids",
+    "sha256": "5061033a8c13354302ef9f01e8c439fa5221655aca4132dd85866efc52412634",
+    "version": "2026.10.20",
+    "retrieved_at": "2026-10-21T00:00:00+00:00"
+  },
+  "usb": {
+    "source_url": "http://www.linux-usb.org/usb.ids",
+    "sha256": "f5a48b0cc8dae1607c2f0bae6b8dc13f2ecef69dbeaeaf34b4be8e280d34dba4",
+    "version": "2026.06.26",
+    "retrieved_at": "2026-10-21T00:00:00+00:00"
+  }
+}

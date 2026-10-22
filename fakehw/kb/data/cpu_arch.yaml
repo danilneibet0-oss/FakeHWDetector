@@ -1,0 +1,18 @@
+# CPUID signature -> microarchitecture and brand-string patterns allowed for it.
+# Rule: every entry needs a `source`. Do not add signatures from memory.
+# `completeness: partial` means the pattern list may miss legitimate SKUs (rule weight is low for that reason).
+entries:
+  - vendor: GenuineIntel
+    family: 6
+    model: 167
+    microarch: Rocket Lake
+    completeness: partial
+    brand_patterns:
+      - '^11th Gen Intel\(R\) Core\(TM\)'
+      - 'Core\(TM\) i[3579]-11\d{3}'
+      - 'Xeon\(R\) E-23\d{2}'
+    source: >-
+      Signature and brand string observed together on a real machine (developer's Core i5-11400,
+      CPUID family 6 / model 167 / stepping 1, captured 2026-10-21). The microarchitecture name and
+      the Xeon E-2300 pattern come from Intel's public naming and are NOT yet checked against
+      intel-family.h or Intel ARK (see docs/OPEN_QUESTIONS.md).

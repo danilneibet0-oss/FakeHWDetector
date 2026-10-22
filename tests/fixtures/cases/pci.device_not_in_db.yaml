@@ -1,0 +1,36 @@
+rule: pci.device_not_in_db
+# Norm: vendor and device ID are both listed in pci.ids. Suspicious: known vendor, device ID not listed
+# (may also just be a new or unlisted device - low weight).
+cases:
+  - name: real RTX 3060 Ti from the developer machine
+    kind: negative
+    expect: not_fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "2486", subsys_vendor_id: "1B4C", subsys_device_id: "146C", revision: "A1", class_code: "030000"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - device ID replaced by one absent from the NVIDIA list
+    kind: positive
+    expect: fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "FFFF", class_code: "030000"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - unknown vendor AND unknown device is the vendor rule's job
+    kind: borderline
+    expect: not_fired
+    device:
+      class: pci
+      source: fixture
+      raw_ids: {vendor_id: "7777", device_id: "FFFF"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: record without IDs
+    kind: unverified
+    expect: unverified
+    device:
+      class: gpu
+      source: fixture
+      errors: ["unparsable PCI device id"]
+      collected_at: "2024-01-01T00:00:00Z"

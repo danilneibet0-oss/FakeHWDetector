@@ -1,0 +1,44 @@
+rule: kb.entry_marked_counterfeit
+# Norm: the VID/PID (or PCI vendor/device) entry in usb.ids/pci.ids is not described as counterfeit.
+# Suspicious: the database entry itself names the ID as counterfeit/fake. No ID lists are hardcoded.
+cases:
+  - name: real Logitech/CH340 USB IDs from the developer machine
+    kind: negative
+    expect: not_fired
+    device:
+      class: usb
+      source: fixture
+      raw_ids: {vendor_id: "1A86", product_id: "7523", revision: "8134"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - VID/PID set to the usb.ids entry "Counterfeit flash drive [Kingston]"
+    kind: positive
+    expect: fired
+    device:
+      class: usb
+      source: fixture
+      raw_ids: {vendor_id: "0001", product_id: "7778"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - PCI ID set to the pci.ids entry "GeForce GTX 960 FAKE"
+    kind: positive
+    expect: fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "1404", class_code: "030000"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: entry described as a "clone" (compatible product) is not counterfeit
+    kind: borderline
+    expect: not_fired
+    device:
+      class: usb
+      source: fixture
+      raw_ids: {vendor_id: "04F9", product_id: "0129"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: device that failed descriptor read (VID_0000 and no PID data)
+    kind: unverified
+    expect: unverified
+    device:
+      class: usb
+      source: fixture
+      errors: ["unparsable USB device id"]
+      collected_at: "2024-01-01T00:00:00Z"

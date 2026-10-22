@@ -1,0 +1,33 @@
+{
+  "note": "Real Win32_PhysicalMemory dump from the developer machine; serials replaced.",
+  "entries": [
+    {
+      "BankLabel": "BANK 0",
+      "DeviceLocator": "Controller0-ChannelA-DIMM0",
+      "Manufacturer": "Kingston",
+      "PartNumber": "KHX2666C16/8G       ",
+      "SerialNumber": "SN78575585",
+      "Capacity": 8589934592,
+      "Speed": 2667,
+      "ConfiguredClockSpeed": 2667,
+      "SMBIOSMemoryType": 26,
+      "FormFactor": 8,
+      "DataWidth": 64,
+      "TotalWidth": 64
+    },
+    {
+      "BankLabel": "BANK 1",
+      "DeviceLocator": "Controller0-ChannelB-DIMM0",
+      "Manufacturer": "Kingston",
+      "PartNumber": "KHX2666C16/8G       ",
+      "SerialNumber": "SN0B15AECA",
+      "Capacity": 8589934592,
+      "Speed": 2667,
+      "ConfiguredClockSpeed": 2667,
+      "SMBIOSMemoryType": 26,
+      "FormFactor": 8,
+      "DataWidth": 64,
+      "TotalWidth": 64
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+rule: ram.part_number_placeholder
+# Norm: a real-looking part number. Suspicious: empty or a firmware placeholder string (common on OEM laptops - low weight).
+cases:
+  - name: real module part number from the developer machine
+    kind: negative
+    expect: not_fired
+    device:
+      class: ram
+      source: fixture
+      strings: {part_number: "KHX2666C16/8G", manufacturer: "Kingston"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - part number replaced by the SMBIOS placeholder
+    kind: positive
+    expect: fired
+    device:
+      class: ram
+      source: fixture
+      strings: {part_number: "To Be Filled By O.E.M."}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: a lone character that is not a known placeholder word is not flagged
+    kind: borderline
+    expect: not_fired
+    device:
+      class: ram
+      source: fixture
+      strings: {part_number: "X"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: record without part number data
+    kind: unverified
+    expect: unverified
+    device:
+      class: ram
+      source: fixture
+      raw_ids: {capacity_bytes: "8589934592"}
+      collected_at: "2024-01-01T00:00:00Z"

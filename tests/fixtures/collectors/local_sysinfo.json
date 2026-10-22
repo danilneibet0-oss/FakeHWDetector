@@ -1,0 +1,81 @@
+{
+  "_note": "Captured with fakehw.sysinfo on a Surface Pro (Windows 11 Pro 25H2, Russian UI); computer name replaced.",
+  "info": {
+    "os": {
+      "Caption": "Майкрософт Windows 11 Pro",
+      "Version": "10.0.26200",
+      "BuildNumber": "26200",
+      "UBR": 9711,
+      "DisplayVersion": "25H2",
+      "OSArchitecture": "64-разрядная",
+      "InstallDate": "2026-06-24T19:20:27",
+      "LastBootUpTime": "2026-10-21T15:08:10",
+      "TotalVisibleMemorySize": 8303648,
+      "FreePhysicalMemory": 524840
+    },
+    "computer": {
+      "Name": "TEST-PC",
+      "Manufacturer": "Microsoft Corporation",
+      "Model": "Surface Pro",
+      "SystemType": "x64-based PC",
+      "TotalPhysicalMemory": 8502935552
+    },
+    "board": [{"Manufacturer": "Microsoft Corporation", "Product": "Surface Pro", "Version": null}],
+    "bios": [{"Manufacturer": "Microsoft Corporation", "SMBIOSBIOSVersion": "239.871.768", "ReleaseDate": "2015-11-07T03:00:00"}],
+    "cpu": [
+      {
+        "Name": "Intel(R) Core(TM) i5-7300U CPU @ 2.60GHz",
+        "NumberOfCores": 2,
+        "NumberOfLogicalProcessors": 4,
+        "MaxClockSpeed": 2712,
+        "SocketDesignation": "U3E1",
+        "L2CacheSize": 512,
+        "L3CacheSize": 3072
+      }
+    ],
+    "memory": [
+      {
+        "DeviceLocator": "ChannelB-DIMM0",
+        "BankLabel": "BANK 2",
+        "Manufacturer": "SK Hynix",
+        "PartNumber": "H9CCNNNBJTALAR-NUD",
+        "Capacity": 4294967296,
+        "Speed": 1867,
+        "ConfiguredClockSpeed": 1867,
+        "SMBIOSMemoryType": 29
+      },
+      {
+        "DeviceLocator": "ChannelA-DIMM0",
+        "BankLabel": "BANK 0",
+        "Manufacturer": "SK Hynix",
+        "PartNumber": "H9CCNNNBJTALAR-NUD",
+        "Capacity": 4294967296,
+        "Speed": 1867,
+        "ConfiguredClockSpeed": 1867,
+        "SMBIOSMemoryType": 29
+      }
+    ],
+    "video": [
+      {
+        "Name": "Intel(R) HD Graphics 620",
+        "DriverVersion": "27.20.100.8682",
+        "DriverDate": "2020-09-06T03:00:00",
+        "AdapterRAM": 1073741824,
+        "CurrentHorizontalResolution": 2736,
+        "CurrentVerticalResolution": 1824,
+        "CurrentRefreshRate": 59
+      }
+    ],
+    "disks": [
+      {"Index": 1, "Model": "SDXC Card", "Size": 483852096000, "InterfaceType": "USB", "MediaType": "Removable Media"},
+      {"Index": 0, "Model": "KBG30ZPZ256G TOSHIBA", "Size": 256052966400, "InterfaceType": "SCSI", "MediaType": "Fixed hard disk media"}
+    ],
+    "volumes": [
+      {"DeviceID": "C:", "VolumeName": "", "FileSystem": "NTFS", "Size": 254406553600, "FreeSpace": 108058779648}
+    ],
+    "dxgi": [
+      {"description": "Intel(R) HD Graphics 620", "dedicated_video_memory": 134217728},
+      {"description": "Microsoft Basic Render Driver", "dedicated_video_memory": 0}
+    ]
+  }
+}

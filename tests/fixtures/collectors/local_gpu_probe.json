@@ -1,0 +1,36 @@
+{
+  "note": "Real DXGI adapters and NVML devices from the developer machine.",
+  "dxgi": [
+    {
+      "description": "NVIDIA GeForce RTX 3060 Ti",
+      "vendor_id": 4318,
+      "device_id": 9350,
+      "subsys_id": 342629196,
+      "revision": 161,
+      "dedicated_video_memory": 8413773824,
+      "flags": 0
+    },
+    {
+      "description": "Microsoft Basic Render Driver",
+      "vendor_id": 5140,
+      "device_id": 140,
+      "subsys_id": 0,
+      "revision": 0,
+      "dedicated_video_memory": 0,
+      "flags": 2
+    }
+  ],
+  "nvml": [
+    {
+      "name": "NVIDIA GeForce RTX 3060 Ti",
+      "memory_total": 8589934592,
+      "memory_bus_width": 256,
+      "pcie_gen_current": 4,
+      "pcie_gen_max": 4,
+      "pcie_width_current": 16,
+      "pcie_width_max": 16,
+      "pci_device_id": 612765918,
+      "pci_subsystem_id": 342629196
+    }
+  ]
+}

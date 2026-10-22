@@ -1,0 +1,12 @@
+id: gpu.pcie_link_inconsistent
+applies_to: [gpu]
+signals: [pcie_link_consistent]
+condition: "not pcie_link_consistent"
+weight: 0.4
+false_positive_risk: low
+explanation:
+  en: "The current PCIe link generation or width is higher than the maximum the same device reports."
+  ru: "Текущие поколение или ширина линка PCIe выше максимума, который сообщает то же устройство."
+recommendation:
+  en: "Query the link again under load; the values are read from the device and cannot genuinely exceed its own maximum."
+  ru: "Повторите запрос под нагрузкой; значения читаются с устройства и не могут по-настоящему превышать его собственный максимум."

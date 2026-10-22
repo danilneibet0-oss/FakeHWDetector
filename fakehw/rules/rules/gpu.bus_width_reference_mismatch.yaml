@@ -1,0 +1,12 @@
+id: gpu.bus_width_reference_mismatch
+applies_to: [gpu]
+signals: [bus_width_matches_reference]
+condition: "not bus_width_matches_reference"
+weight: 0.5
+false_positive_risk: medium
+explanation:
+  en: "The memory bus width differs from the width known for this PCI device ID."
+  ru: "Ширина шины памяти отличается от известной для этого PCI device ID."
+recommendation:
+  en: "A cut-down chip sold under another model ID is a common counterfeit pattern, but the reference list is partial. Compare with the vendor specification."
+  ru: "Урезанный чип под ID другой модели — типичная подделка, но справочник неполный. Сравните со спецификацией производителя."

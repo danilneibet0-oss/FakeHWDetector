@@ -1,0 +1,37 @@
+rule: ram.jedec_parity_invalid
+# Norm: a JEDEC (JEP106) manufacturer code reported as hex has odd parity in both bytes (bit 7 is the parity bit).
+# Suspicious: either byte has even parity (corrupted or hand-made code). Name strings cannot be judged.
+cases:
+  - name: well-formed code 802C (bytes 0x80 and 0x2C both have odd parity)
+    kind: negative
+    expect: not_fired
+    device:
+      class: ram
+      source: fixture
+      raw_ids: {manufacturer_code: "802C", capacity_bytes: "8589934592"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - last byte changed to 0x2D (even parity)
+    kind: positive
+    expect: fired
+    device:
+      class: ram
+      source: fixture
+      raw_ids: {manufacturer_code: "802D"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: lower-case hex of a well-formed code is still well-formed
+    kind: borderline
+    expect: not_fired
+    device:
+      class: ram
+      source: fixture
+      raw_ids: {manufacturer_code: "802c"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: real module - BIOS gives the name Kingston, not a code
+    kind: unverified
+    expect: unverified
+    device:
+      class: ram
+      source: fixture
+      raw_ids: {capacity_bytes: "8589934592"}
+      strings: {manufacturer: "Kingston", part_number: "KHX2666C16/8G"}
+      collected_at: "2024-01-01T00:00:00Z"

@@ -1,0 +1,16 @@
+# Reference physical specs per PCI device ID, used by the GPU rules.
+# Rule: every entry needs a `source`. Do not add entries from memory of spec sheets.
+# vram_mib / bus_width_bits are the configurations known for the device ID; pcie_max_* is the chip capability
+# (a card in an older slot may report lower maximums, never higher).
+entries:
+  - vendor: 0x10DE
+    device: 0x2486
+    name: NVIDIA GeForce RTX 3060 Ti
+    vram_mib: [8192]
+    bus_width_bits: [256]
+    pcie_max_gen: 4
+    pcie_max_width: 16
+    completeness: partial
+    source: >-
+      Observed through NVML and DXGI on the developer machine (captured 2026-10-21): NVML total memory 8192 MiB,
+      256-bit bus, PCIe gen 4 x16. Other VRAM variants of this device ID, if any exist, are not known to the author.

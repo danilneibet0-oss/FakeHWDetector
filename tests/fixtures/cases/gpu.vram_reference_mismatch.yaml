@@ -1,0 +1,36 @@
+rule: gpu.vram_reference_mismatch
+# Norm: reported VRAM (NVML total, else DXGI dedicated) is one of the sizes in gpu_refs.yaml for this PCI device ID, within -6%/+2%.
+# Suspicious: a size the reference does not list. No reference entry for the device means "could not verify".
+cases:
+  - name: real RTX 3060 Ti - NVML 8192 MiB
+    kind: negative
+    expect: not_fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "2486", vram_dedicated_bytes: "8413773824", nvml_vram_total_bytes: "8589934592"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - 2 GiB reported for a device ID that is listed with 8 GiB
+    kind: positive
+    expect: fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "2486", vram_dedicated_bytes: "2147483648", nvml_vram_total_bytes: "2147483648"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: only DXGI (8024 MiB, 2% below 8192) still matches
+    kind: borderline
+    expect: not_fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "2486", vram_dedicated_bytes: "8413773824"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: device ID without a reference entry
+    kind: unverified
+    expect: unverified
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "FFFF", vram_dedicated_bytes: "8413773824", nvml_vram_total_bytes: "8589934592"}
+      collected_at: "2024-01-01T00:00:00Z"

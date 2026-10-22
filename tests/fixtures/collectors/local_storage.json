@@ -1,0 +1,44 @@
+{
+  "note": "Real Win32_DiskDrive + Get-PhysicalDisk dump from the developer machine; serials replaced.",
+  "entries": [
+    {
+      "Index": 2,
+      "Model": "GAMER GA1J0240N",
+      "SerialNumber": "SN117ECFF2",
+      "FirmwareRevision": "ECFM12.3",
+      "Size": 240054796800,
+      "InterfaceType": "SCSI",
+      "MediaType": "Fixed hard disk media",
+      "PNPDeviceID": "SCSI\\DISK&VEN_NVME&PROD_GAMER_GA1J0240N\\5&23D79EFE&0&000000",
+      "BusType": "NVMe",
+      "PhysicalMediaType": "SSD",
+      "HealthStatus": "Healthy"
+    },
+    {
+      "Index": 0,
+      "Model": "ADATA SU650",
+      "SerialNumber": "SN37761AC2",
+      "FirmwareRevision": "HCS1A25C",
+      "Size": 120031511040,
+      "InterfaceType": "IDE",
+      "MediaType": "Fixed hard disk media",
+      "PNPDeviceID": "SCSI\\DISK&VEN_ADATA&PROD_SU650\\4&39F8F96F&0&000000",
+      "BusType": "SATA",
+      "PhysicalMediaType": "SSD",
+      "HealthStatus": "Healthy"
+    },
+    {
+      "Index": 1,
+      "Model": "ST2000DM005-2U9102",
+      "SerialNumber": "SN4E516358",
+      "FirmwareRevision": "0001",
+      "Size": 2000396321280,
+      "InterfaceType": "IDE",
+      "MediaType": "Fixed hard disk media",
+      "PNPDeviceID": "SCSI\\DISK&VEN_&PROD_ST2000DM005-2U91\\4&39F8F96F&0&030000",
+      "BusType": "SATA",
+      "PhysicalMediaType": "HDD",
+      "HealthStatus": "Healthy"
+    }
+  ]
+}

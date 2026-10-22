@@ -1,0 +1,36 @@
+# FRAGMENT of usb.ids (verbatim lines) for tests. Source: http://www.linux-usb.org/usb.ids
+#
+#	List of USB ID's
+#
+#	Maintained by Stephen J. Gowdy <linux.usb.ids@gmail.com>
+#	If you have any new entries, please submit them via
+#		http://www.linux-usb.org/usb-ids.html
+#	or send entries as patches (diff -u old new) in the
+#	body of your email (a bot will attempt to deal with it).
+#	The latest version can be obtained from
+#		http://www.linux-usb.org/usb.ids
+#
+# Version: 2026.06.26
+# Date:    2026-06-26 20:34:02
+#
+
+
+0001  Fry's Electronics
+	7778  Counterfeit flash drive [Kingston]
+0002  Ingram
+	0002  passport00
+046d  Logitech, Inc.
+	0082  Acer Aspire 5672 Webcam
+	0200  WingMan Extreme Joystick
+	0203  M2452 Keyboard
+	0242  Chillstream for Xbox 360
+	0301  M4848 Mouse
+C 03  Human Interface Device
+	00  No Subclass
+		00  None
+		01  Keyboard
+		02  Mouse
+	01  Boot Interface Subclass
+		00  None
+		01  Keyboard
+AT 0100  USB Undefined

@@ -1,0 +1,12 @@
+id: gpu.name_pci_ids_mismatch
+applies_to: [gpu]
+signals: [name_matches_pci_ids]
+condition: "not name_matches_pci_ids"
+weight: 0.45
+false_positive_risk: medium
+explanation:
+  en: "The adapter name reported by the driver does not match the product name registered in pci.ids for its PCI device ID."
+  ru: "Имя адаптера, которое сообщает драйвер, не совпадает с названием продукта, записанным в pci.ids для его PCI device ID."
+recommendation:
+  en: "Rebrands and OEM names can differ legitimately; otherwise a changed name with an unchanged ID (or the reverse) is a classic sign of a flashed or spoofed card."
+  ru: "Ребренды и OEM-названия могут отличаться легитимно; в остальных случаях изменённое имя при прежнем ID (или наоборот) — классический признак перепрошитой или подменённой карты."

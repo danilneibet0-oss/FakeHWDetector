@@ -1,0 +1,49 @@
+rule: cpu.brand_arch_mismatch
+# Norm: brand string matches a pattern allowed for the CPUID family/model in cpu_arch.yaml.
+# Suspicious: family/model is in the table but the brand string fits none of its patterns.
+cases:
+  - name: real i5-11400 from the developer machine (GenuineIntel 6/167/1)
+    kind: negative
+    expect: not_fired
+    device:
+      class: cpu
+      source: cpuid
+      raw_ids: {family: "6", model: "167", stepping: "1", hypervisor_present: "false"}
+      strings: {vendor: "GenuineIntel", brand: "11th Gen Intel(R) Core(TM) i5-11400 @ 2.60GHz"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - brand replaced by a 12th Gen i9 string, signature untouched
+    kind: positive
+    expect: fired
+    device:
+      class: cpu
+      source: cpuid
+      raw_ids: {family: "6", model: "167", stepping: "1", hypervisor_present: "false"}
+      strings: {vendor: "GenuineIntel", brand: "Intel(R) Core(TM) i9-12900K CPU @ 3.20GHz"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - sibling SKU of the same generation (i7-11700K) is compatible
+    kind: borderline
+    expect: not_fired
+    device:
+      class: cpu
+      source: cpuid
+      raw_ids: {family: "6", model: "167", stepping: "1", hypervisor_present: "false"}
+      strings: {vendor: "GenuineIntel", brand: "11th Gen Intel(R) Core(TM) i7-11700K @ 3.60GHz"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - Xeon E-2300 naming on the same signature is allowed by the table
+    kind: borderline
+    expect: not_fired
+    device:
+      class: cpu
+      source: cpuid
+      raw_ids: {family: "6", model: "167", stepping: "1", hypervisor_present: "false"}
+      strings: {vendor: "GenuineIntel", brand: "Intel(R) Xeon(R) E-2314 CPU @ 2.80GHz"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: signature not present in the table - no data, cannot verify
+    kind: unverified
+    expect: unverified
+    device:
+      class: cpu
+      source: cpuid
+      raw_ids: {family: "6", model: "1", stepping: "1", hypervisor_present: "false"}
+      strings: {vendor: "GenuineIntel", brand: "Intel(R) Core(TM) i5-11400"}
+      collected_at: "2024-01-01T00:00:00Z"

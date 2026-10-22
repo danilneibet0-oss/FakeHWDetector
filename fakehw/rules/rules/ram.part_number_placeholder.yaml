@@ -1,0 +1,12 @@
+id: ram.part_number_placeholder
+applies_to: [ram]
+signals: [part_number_placeholder]
+condition: "part_number_placeholder"
+weight: 0.2
+false_positive_risk: high
+explanation:
+  en: The memory module reports an empty or placeholder part number.
+  ru: Модуль памяти сообщает пустой или шаблонный part number.
+recommendation:
+  en: Many OEM laptops and some genuine modules do this. Compare the module label and SPD with the vendor data.
+  ru: Так делают многие OEM-ноутбуки и часть настоящих модулей. Сверьте маркировку и SPD с данными производителя.

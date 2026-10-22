@@ -1,0 +1,12 @@
+id: cpu.brand_vendor_mismatch
+applies_to: [cpu]
+signals: [brand_vendor_mismatch]
+condition: "brand_vendor_mismatch"
+weight: 0.7
+false_positive_risk: low
+explanation:
+  en: The CPU brand string names a different vendor (Intel/AMD) than the CPUID vendor string.
+  ru: Строка бренда процессора называет другого производителя (Intel/AMD), чем строка вендора в CPUID.
+recommendation:
+  en: Compare with the CPU label and the manufacturer's specification. A hypervisor can present arbitrary CPUID values.
+  ru: Сверьте с маркировкой процессора и спецификацией производителя. Гипервизор может выдавать произвольные значения CPUID.

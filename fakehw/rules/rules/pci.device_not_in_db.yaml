@@ -1,0 +1,12 @@
+id: pci.device_not_in_db
+applies_to: [pci, gpu]
+signals: [vendor_known, device_known]
+condition: "vendor_known and not device_known"
+weight: 0.2
+false_positive_risk: medium
+explanation:
+  en: The vendor is known but this device ID is not listed under it in pci.ids (new, rare or altered device ID).
+  ru: Вендор известен, но этого ID устройства нет в pci.ids (новое, редкое или изменённое устройство).
+recommendation:
+  en: Update the database and re-scan. A single unlisted ID is weak evidence on its own.
+  ru: Обновите базу и повторите проверку. Один неизвестный ID сам по себе слабый признак.

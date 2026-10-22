@@ -1,0 +1,12 @@
+id: gpu.pcie_link_exceeds_reference
+applies_to: [gpu]
+signals: [pcie_exceeds_reference]
+condition: "pcie_exceeds_reference"
+weight: 0.35
+false_positive_risk: medium
+explanation:
+  en: "The maximum PCIe generation or width reported is higher than the chip with this device ID supports."
+  ru: "Заявленные максимальные поколение или ширина PCIe выше, чем поддерживает чип с этим device ID."
+recommendation:
+  en: "Lower values (older slot) are normal; higher ones are not. Check the reference data and the vendor specification."
+  ru: "Меньшие значения (старый слот) нормальны, большие нет. Проверьте справочные данные и спецификацию производителя."

@@ -1,0 +1,120 @@
+# ${APP_NAME}
+
+*${TAGLINE}* · [Русская версия](README.ru.md)
+
+${APP_NAME} compares what your computer's hardware **claims** to be with what it **actually reports**: CPU, GPU,
+memory, USB devices and drives. It is a defensive tool for checking **your own** hardware. It works offline, needs no
+administrator rights for most checks, and never gives a bare verdict: every finding says which signals it rests on,
+how confident it is and what to do next.
+
+## What it checks
+
+| Class | Sources | Examples of checks |
+|---|---|---|
+| CPU | raw CPUID (family/model/stepping, brand string, hypervisor flag) | brand names the other vendor; brand does not fit the signature |
+| GPU / PCI | Windows PnP data, DXGI, NVML | device or vendor ID missing from pci.ids; name differs from the ID; VRAM disagrees between APIs; invalid bus width; impossible PCIe link |
+| Memory | SMBIOS (`Win32_PhysicalMemory`), optional SPD plugin (off) | malformed JEDEC manufacturer code; placeholder part number or serial |
+| USB | Windows PnP data + usb.ids | the database itself marks the VID/PID as counterfeit |
+| Storage | `Win32_DiskDrive`, NVMe Identify, SATA IDENTIFY and SMART (need admin rights) | model differs from the drive's own data; reported size above the drive's capacity; unregistered NVMe vendor |
+
+${RULE_COUNT} rules ship with the tool. Each rule is a YAML file with a documented "normal / suspicious" table and test
+fixtures: see [docs/RULES.md](docs/RULES.md).
+
+## Install and run
+
+Ready-made Windows 10/11 x64 builds (no Python needed) come in two forms:
+
+- **Installer** `${APP_NAME}-<version>-setup.exe`: installs for the current user without administrator rights (or for
+  all users if chosen), adds a Start menu shortcut and an uninstaller. Settings are kept in `%APPDATA%\${APP_NAME}`.
+- **Portable** `${APP_NAME}-<version>-portable.zip`: unpack anywhere (for example to a USB stick) and run
+  `${APP_NAME}.exe`. Settings and downloaded databases stay in the `data` folder next to it; delete `portable.txt`
+  to use the user profile instead.
+
+Both contain the window app `${APP_NAME}.exe` and the console tool `${CLI_NAME}.exe`. The window has two tabs:
+**Device check** (the authenticity scan) and **About this computer** (OS, board, BIOS, CPU, memory, video, drives;
+serial numbers are not read; the **Copy** button puts the overview on the clipboard).
+
+From source: Python 3.11+ on Windows 10/11.
+
+```bash
+pip install ".[ui]"        # the [ui] extra adds the graphical interface (PySide6)
+${CLI_NAME} scan                # JSON report on stdout
+${CLI_NAME} scan --format md -o report.md
+${CLI_NAME} gui                 # graphical interface
+${CLI_NAME} kb update           # refresh pci.ids / usb.ids (the only command that uses the network)
+${CLI_NAME} selftest            # checks that the bundled data files load
+```
+
+Useful options: `--lang en|ru`, `--only pci,usb,cpu,ram,storage,gpu`, `--include-serials` (serial numbers are hashed
+by default), `--enable-spd` (see limitations). The interface language can also be chosen in the window and is remembered.
+
+The installer, the portable zip and the program folder are built with `python tools/build_exe.py` (needs Inno Setup 6
+for the installer; see [docs/RELEASE_CHECKLIST.md](docs/RELEASE_CHECKLIST.md)).
+
+## Reading the result
+
+| Level | Meaning |
+|---|---|
+| Information | nothing alarming, or only weak signals |
+| Suspicious | some signals point to a mismatch |
+| Likely counterfeit | several or strong signals agree; verify with the seller/vendor |
+| Could not verify | the data needed was not available (missing rights, no reference data) |
+
+The level of a device comes from the **weighted sum** of its triggered rules, not from the single worst rule.
+If virtualization is detected, the confidence of all CPU and GPU rules is lowered.
+
+## False alarms
+
+Treat every finding as a reason to look closer, not as proof. Common innocent causes:
+
+- **Rebrands and OEM variants:** the same chip sold under another name, OEM-only IDs, board-partner subsystem IDs.
+- **Databases lag behind hardware:** brand-new or rare devices are not in pci.ids / usb.ids yet (`${CLI_NAME} kb update` helps).
+- **Virtualization:** a hypervisor can present any CPU and GPU data. A Windows host with Hyper-V or virtualization-based
+  security shows a hypervisor too; it is reported as "possible", with a smaller confidence reduction.
+- **Firmware that leaves fields empty:** many OEM laptops report placeholder memory part numbers or serials.
+
+## Limitations
+
+- Windows only. Tested on one Windows 11 machine (Intel CPU, NVIDIA GPU, SATA + NVMe drives); other hardware, AMD/Intel
+  GPUs and ARM are untested.
+- **Reference data is small.** The CPU signature table and the GPU reference table contain one entry each (sourced from
+  the developer's machine). For every other CPU or GPU the reference-based rules answer "could not verify".
+  No JEDEC manufacturer table is bundled; only the parity check of the code is done.
+- Administrator rights are needed for SATA IDENTIFY and SMART; without them such drives are marked "needs administrator
+  rights". The elevated code path is untested.
+- Reading SPD from memory modules would need a kernel driver; this tool does not use one. The SPD plugin is only an
+  interface and is disabled by default.
+- Fake-capacity flash drives cannot be detected without a full write test (use f3 or H2testw); this tool never writes.
+- USB drives behind bridges can lie about themselves; they are not probed beyond what Windows reports.
+- Thresholds and weights are initial design values, not calibrated on real counterfeit samples.
+
+More detail: [docs/OPEN_QUESTIONS.md](docs/OPEN_QUESTIONS.md).
+
+## How it differs from GPU-Z and HWiNFO
+
+GPU-Z and HWiNFO are mature hardware-information tools that, as far as the author knows, flag counterfeits mainly for
+GPUs. ${APP_NAME} focuses on checking CPU, memory, USB devices and drives as well, shows a confidence level and explains
+every finding with the signals behind it. It is not a replacement: use those tools as a second opinion.
+
+## Privacy
+
+Everything runs locally and offline. The network is used only by `${CLI_NAME} kb update`, on your explicit command.
+Serial numbers are hashed (`sha256:...`) in reports unless you ask otherwise with `--include-serials`; do not share
+reports that contain real serial numbers.
+
+## Data and licenses
+
+The bundled `pci.ids` and `usb.ids` snapshots come from the PCI ID Project and linux-usb.org; their headers state they
+may be used under GPL-2+ or the 3-clause BSD license. Versions and SHA-256 are in `fakehw/kb/data/snapshot.json`.
+The license of this project itself has not been chosen yet.
+
+## Development
+
+```bash
+pip install -e ".[ui,dev]"
+pytest                          # fixtures are in tests/fixtures; rule cases in tests/fixtures/cases
+python tools/capture_fixtures.py   # re-capture fixtures from the current machine
+python tools/render_readme.py      # regenerate the READMEs from docs/readme/*.tmpl
+```
+
+The product name lives in one place, `fakehw/branding.py`; titles, reports, `--version` and these READMEs take it from there.

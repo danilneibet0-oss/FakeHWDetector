@@ -1,0 +1,34 @@
+rule: ram.serial_placeholder
+# Norm: serial_shape "normal" (a real serial may contain zeros). Suspicious: empty, all zeros/F, repeated char or placeholder text.
+cases:
+  - name: real serial 0CD214F8 contains zeros but is normal
+    kind: negative
+    expect: not_fired
+    device:
+      class: ram
+      source: fixture
+      raw_ids: {serial_shape: "normal"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - serial replaced by all zeros
+    kind: positive
+    expect: fired
+    device:
+      class: ram
+      source: fixture
+      raw_ids: {serial_shape: "zeros"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - repeated character serial (edge of the placeholder definition)
+    kind: borderline
+    expect: fired
+    device:
+      class: ram
+      source: fixture
+      raw_ids: {serial_shape: "repeated"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: no serial data collected
+    kind: unverified
+    expect: unverified
+    device:
+      class: ram
+      source: fixture
+      collected_at: "2024-01-01T00:00:00Z"

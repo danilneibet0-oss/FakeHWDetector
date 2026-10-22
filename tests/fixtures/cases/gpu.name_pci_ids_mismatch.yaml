@@ -1,0 +1,40 @@
+rule: gpu.name_pci_ids_mismatch
+# Norm: the adapter name from DXGI/NVML contains (or is contained in) the marketing name pci.ids lists for the PCI device ID.
+# Suspicious: the driver-reported name and the name registered for the device ID are different products.
+cases:
+  - name: real RTX 3060 Ti - pci.ids "GA104 [GeForce RTX 3060 Ti]"
+    kind: negative
+    expect: not_fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "2486"}
+      strings: {dxgi_description: "NVIDIA GeForce RTX 3060 Ti", nvml_name: "NVIDIA GeForce RTX 3060 Ti"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - name changed to a GTX 1050 Ti, device ID untouched
+    kind: positive
+    expect: fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "2486"}
+      strings: {dxgi_description: "NVIDIA GeForce GTX 1050 Ti", nvml_name: "NVIDIA GeForce GTX 1050 Ti"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: edited - name with an extra suffix (LHR) still contains the registered name
+    kind: borderline
+    expect: not_fired
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "2486"}
+      strings: {dxgi_description: "NVIDIA GeForce RTX 3060 Ti LHR"}
+      collected_at: "2024-01-01T00:00:00Z"
+  - name: device ID not in pci.ids - no registered name to compare
+    kind: unverified
+    expect: unverified
+    device:
+      class: gpu
+      source: fixture
+      raw_ids: {vendor_id: "10DE", device_id: "FFFF"}
+      strings: {dxgi_description: "NVIDIA GeForce RTX 3060 Ti"}
+      collected_at: "2024-01-01T00:00:00Z"

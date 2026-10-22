@@ -1,0 +1,40 @@
+# FRAGMENT of pci.ids (verbatim lines) for tests. Source: https://pci-ids.ucw.cz/v2.2/pci.ids
+#
+#	List of PCI IDs
+#
+#	Version: 2026.10.20
+#	Date:    2026-10-20 03:15:01
+#
+#	Maintained by Albert Pool, Martin Mares, and other volunteers from
+#	the PCI ID Project at https://pci-ids.ucw.cz/.
+#
+#	New data are always welcome, especially if they are accurate. If you have
+#	anything to contribute, please follow the instructions at the web site.
+#
+10de  NVIDIA Corporation
+	0008  NV1 [STG2000X-B Series]
+	0009  NV1 [NV1 Series]
+	0018  NV3 [Riva 128]
+	0019  NV3 [Riva 128ZX]
+	0020  NV4 [Riva TNT]
+		1043 0200  V3400 TNT
+		1048 0c18  Erazor II SGRAM
+		1048 0c19  Erazor II
+
+C 00  Unclassified device
+	00  Non-VGA unclassified device
+	01  VGA compatible unclassified device
+	05  Image coprocessor
+C 01  Mass storage controller
+	00  SCSI storage controller
+		00  Vendor specific
+		11  SCSI storage device (SOP target port using PQI)
+		12  SCSI controller (SOP target port using PQI)
+		13  SCSI storage device & controller (SOP target port using PQI)
+		21  SCSI storage device (SOP target port using NVMe)
+	01  IDE interface
+		00  ISA Compatibility mode-only controller
+		05  PCI native mode-only controller
+		0a  ISA Compatibility mode controller, supports both channels switched to PCI native mode
+		0f  PCI native mode controller, supports both channels switched to ISA compatibility mode
+		80  ISA Compatibility mode-only controller, supports bus mastering
