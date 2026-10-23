@@ -1,0 +1,2 @@
+# knowledge-base snapshots are hashed byte-for-byte (snapshot.json): never convert line endings
+fakehw/kb/data/*.ids -text

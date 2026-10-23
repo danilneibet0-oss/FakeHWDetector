@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fakehwdetector"
-version = "0.1.0"
+version = "0.1.1"
 description = "Hardware Authenticity Checker"
 requires-python = ">=3.11"
 dependencies = ["pydantic>=2.5", "PyYAML>=6.0"]

@@ -1,6 +1,6 @@
 import pytest
 
-from fakehw import branding, i18n
+from fakehw import __version__, branding, i18n
 from fakehw.cli import main
 
 
@@ -15,7 +15,7 @@ def test_version(capsys):
         main(["--version"])
     assert e.value.code == 0
     out = capsys.readouterr().out
-    assert branding.APP_NAME in out and "0.1.0" in out
+    assert branding.APP_NAME in out and __version__ in out
 
 
 def test_help_uses_branding(capsys):
