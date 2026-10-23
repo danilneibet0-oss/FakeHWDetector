@@ -12,12 +12,13 @@ from ..report.json_export import export_json
 from ..report.md_export import export_markdown
 from ..rules.scoring import virtualization_state
 from ..scan import ScanService
-from ..settings import Settings
+from ..settings import THEMES, Settings
 from . import viewmodel as vm
 from .detail_panel import DetailPanel
 from .device_table import DeviceTableModel
 from .sysinfo_panel import SystemInfoPanel
 from .tasks import BackgroundTask
+from .theme import apply_theme
 
 LANGUAGE_NAMES = {"en": "English", "ru": "Русский"}
 
@@ -44,6 +45,10 @@ class MainWindow(QMainWindow):
         self.language_combo = QComboBox()
         for code in i18n.SUPPORTED_LANGUAGES:
             self.language_combo.addItem(LANGUAGE_NAMES.get(code, code), code)
+        self.theme_label = QLabel()
+        self.theme_combo = QComboBox()
+        for name in THEMES:
+            self.theme_combo.addItem("", name)  # labels are set in _retranslate
 
         bar = QHBoxLayout()
         for w in (self.scan_button, self.export_button, self.serials_check, self.only_findings_check):
@@ -76,6 +81,9 @@ class MainWindow(QMainWindow):
         language = QWidget()  # shared by both tabs, so it sits in the tab bar corner
         lang_layout = QHBoxLayout(language)
         lang_layout.setContentsMargins(0, 0, 4, 0)
+        lang_layout.addWidget(self.theme_label)
+        lang_layout.addWidget(self.theme_combo)
+        lang_layout.addSpacing(8)
         lang_layout.addWidget(self.language_label)
         lang_layout.addWidget(self.language_combo)
 
@@ -92,11 +100,16 @@ class MainWindow(QMainWindow):
         self.language_combo.blockSignals(True)
         self.language_combo.setCurrentIndex(self.language_combo.findData(settings.language))
         self.language_combo.blockSignals(False)
+        apply_theme(settings.theme)
+        self.theme_combo.blockSignals(True)
+        self.theme_combo.setCurrentIndex(self.theme_combo.findData(settings.theme))
+        self.theme_combo.blockSignals(False)
 
         self.scan_button.clicked.connect(self.start_scan)
         self.export_button.clicked.connect(self.export_report)
         self.only_findings_check.toggled.connect(lambda _: self._refresh_rows())
         self.language_combo.currentIndexChanged.connect(self._language_changed)
+        self.theme_combo.currentIndexChanged.connect(self._theme_changed)
         self.table.selectionModel().selectionChanged.connect(self._selection_changed)
         self.tabs.currentChanged.connect(self._tab_changed)
         self.sysinfo.copied.connect(lambda: self._show_status("ui.sys.copied"))
@@ -114,6 +127,9 @@ class MainWindow(QMainWindow):
         self.serials_check.setText(t("ui.include_serials"))
         self.only_findings_check.setText(t("ui.only_findings"))
         self.language_label.setText(t("ui.language"))
+        self.theme_label.setText(t("ui.theme"))
+        for i in range(self.theme_combo.count()):
+            self.theme_combo.setItemText(i, t(f"ui.theme.{self.theme_combo.itemData(i)}"))
         self.tabs.setTabText(0, t("ui.tab.check"))
         self.tabs.setTabText(1, t("ui.tab.sysinfo"))
         self.table_model.refresh()
@@ -188,11 +204,18 @@ class MainWindow(QMainWindow):
     def _language_changed(self) -> None:
         lang = self.language_combo.currentData()
         i18n.set_language(lang)
-        Settings(language=lang).save()
+        Settings.update(language=lang)
         if self.report:
             self.report = self.service.reassess(self.report, lang)  # regenerate finding texts, no new scan
             self._refresh_rows()
         self._retranslate()
+
+    # ---- theme ----
+
+    def _theme_changed(self) -> None:
+        theme = self.theme_combo.currentData()
+        apply_theme(theme)
+        Settings.update(theme=theme)
 
     # ---- export ----
 

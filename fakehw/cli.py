@@ -74,7 +74,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  {rule.id}  ({rule.false_positive_risk})")
         return 0
     if args.command == "config":
-        Settings(language=args.language).save()
+        Settings.update(language=args.language)
         i18n.set_language(args.language)
         print(i18n.t("cli.language_saved", language=args.language))
         return 0

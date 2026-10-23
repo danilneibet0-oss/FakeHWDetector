@@ -171,6 +171,29 @@ def test_language_from_settings_is_applied_at_start(qtbot):
     assert w.language_combo.currentData() == "ru"
 
 
+def test_theme_switch_applies_and_persists(qtbot, monkeypatch):
+    applied = []
+    monkeypatch.setattr("fakehw.ui.main_window.apply_theme", applied.append)
+    Settings(language="ru").save()
+    w = make_window(qtbot)
+    assert applied == ["system"]
+    assert w.theme_combo.currentText() == "Системная"
+    w.theme_combo.setCurrentIndex(w.theme_combo.findData("dark"))
+    assert applied[-1] == "dark"
+    s = Settings.load()
+    assert (s.theme, s.language) == ("dark", "ru")  # language survives the theme save
+
+
+def test_theme_from_settings_is_applied_at_start(qtbot, monkeypatch):
+    applied = []
+    monkeypatch.setattr("fakehw.ui.main_window.apply_theme", applied.append)
+    Settings(theme="light").save()
+    w = make_window(qtbot)
+    assert applied == ["light"]
+    assert w.theme_combo.currentData() == "light"
+    assert w.theme_combo.currentText() == "Light"
+
+
 def test_only_findings_filter(qtbot):
     w = scanned(qtbot)
     w.only_findings_check.setChecked(True)
